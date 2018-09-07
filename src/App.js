@@ -26,7 +26,7 @@ const Dataviz = ({ data, width, height }) => (
             data={data}
             xData={d => d.weight[0]}
             yData={d => d.height[0]}
-            entry={({ x, y }) => <Datapoint x={x} y={y} />}
+            entry={({ x, y, breed }) => <Datapoint x={x} y={y} breed={breed} />}
             width={width / 2}
             height={height / 2}
             xLabel="Weight (lbs)"
@@ -39,7 +39,7 @@ const Dataviz = ({ data, width, height }) => (
             data={data}
             xData={d => d.obey}
             yData={d => d.sales}
-            entry={({ x, y }) => <Datapoint x={x} y={y} />}
+            entry={({ x, y, breed }) => <Datapoint x={x} y={y} breed={breed} />}
             width={width / 2}
             height={height / 2}
             xLabel="Obey %"
@@ -122,15 +122,17 @@ class App extends Component {
                     <h1 className="App-title">Welcome to React</h1>
                 </header>
                 <p className="App-intro" ref="">
-                    {data === null ? (
-                        "Loading CSV files ..."
-                    ) : (
-                        <Dataviz
-                            data={data}
-                            width={windowWidth}
-                            height={windowHeight}
-                        />
-                    )}
+                    <DashboardContext.Provider value={this.state}>
+                        {data === null ? (
+                            "Loading CSV files ..."
+                        ) : (
+                            <Dataviz
+                                data={data}
+                                width={windowWidth}
+                                height={windowHeight}
+                            />
+                        )}
+                    </DashboardContext.Provider>
                 </p>
             </div>
         );
