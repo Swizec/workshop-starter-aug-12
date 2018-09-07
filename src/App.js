@@ -18,7 +18,7 @@ const Svg = styled.svg`
     top: 250px;
 `;
 
-const Dataviz = ({ data }) => (
+const Dataviz = ({ data, width, height }) => (
     <Svg>
         <Scatterplot
             x={80}
@@ -27,8 +27,8 @@ const Dataviz = ({ data }) => (
             xData={d => d.weight[0]}
             yData={d => d.height[0]}
             entry={({ x, y }) => <Datapoint x={x} y={y} />}
-            width={300}
-            height={300}
+            width={width / 2}
+            height={height / 2}
             xLabel="Weight (lbs)"
             yLabel="Height (in)"
             title="Breed weight vs. height"
@@ -40,8 +40,8 @@ const Dataviz = ({ data }) => (
             xData={d => d.obey}
             yData={d => d.sales}
             entry={({ x, y }) => <Datapoint x={x} y={y} />}
-            width={300}
-            height={300}
+            width={width / 2}
+            height={height / 2}
             xLabel="Obey %"
             yLabel="Sales"
             title="Sales v Intelligence"
@@ -53,7 +53,9 @@ class App extends Component {
     state = {
         data: null,
         highlightedBreed: null,
-        highlightBreed: breed => this.setState({ highlightedBreed: breed })
+        highlightBreed: breed => this.setState({ highlightedBreed: breed }),
+        windowWidth: document.body.clientWidth,
+        windowHeight: 600
     };
 
     componentDidMount() {
@@ -94,13 +96,24 @@ class App extends Component {
                     }),
                     {}
                 );
-            console.log(data);
             this.setState({ data });
         });
+
+        window.onresize = () => {
+            this.setState({
+                windowWidth: document.body.clientWidth,
+                windowHeight: 600
+            });
+        };
     }
 
     render() {
-        const { data, highlightedBreed } = this.state;
+        const {
+            data,
+            highlightedBreed,
+            windowWidth,
+            windowHeight
+        } = this.state;
 
         return (
             <div className="App">
@@ -108,11 +121,15 @@ class App extends Component {
                     <img src={logo} className="App-logo" alt="logo" />
                     <h1 className="App-title">Welcome to React</h1>
                 </header>
-                <p className="App-intro">
+                <p className="App-intro" ref="">
                     {data === null ? (
                         "Loading CSV files ..."
                     ) : (
-                        <Dataviz data={data} />
+                        <Dataviz
+                            data={data}
+                            width={windowWidth}
+                            height={windowHeight}
+                        />
                     )}
                 </p>
             </div>
