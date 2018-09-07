@@ -5,16 +5,37 @@ import chroma from "chroma-js";
 import DashboardContext from "./DashboardContext";
 
 const Circle = styled.circle`
-
+    fill: steelblue;
+    fill-opacity: 0.7;
+    stroke: steelblue;
+    stroke-width: 1.5px;
 `;
 
 class Datapoint extends React.Component {
-    circleRef = React.createRef();
+    state = {
+        r: 3
+    };
+
+    highlight = () => {
+        this.setState({ r: 10 });
+    };
+
+    unhighlight = () => {
+        this.setState({ r: 3 });
+    };
 
     render() {
-        const { x, y, breed } = this.props;
+        const { x, y } = this.props;
 
-        return null;
+        return (
+            <Circle
+                cx={x}
+                cy={y}
+                r={this.state.r}
+                onMouseOver={this.highlight}
+                onMouseOut={this.unhighlight}
+            />
+        );
     }
 }
 

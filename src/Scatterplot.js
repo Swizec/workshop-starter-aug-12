@@ -10,16 +10,40 @@ const Heading = styled.text`
 `;
 
 class Scatterplot extends React.Component {
-    state = {};
+    constructor(props) {
+        super(props);
+
+        const data = Object.values(props.data).filter(
+            d => d.weight && d.height
+        );
+
+        this.state = {
+            xScale: d3
+                .scaleLinear()
+                .domain([0, d3.max(data, props.xData)])
+                .range([0, props.width]),
+            yScale: d3
+                .scaleLinear()
+                .domain([0, d3.max(data, props.yData)])
+                .range([props.height, 0]),
+            data
+        };
+    }
 
     static getDerivedStateFromProps(props, state) {
-        const { data, filter } = props;
+        let { data, filter } = props,
+            { xScale, yScale } = state;
+
+        data = Object.values(props.data).filter(d => d.weight && d.height);
+
+        yScale.domain([0, d3.max(data, props.yData)]).range([props.height, 0]);
+        xScale.domain([0, d3.max(data, props.xData)]).range([0, props.width]);
 
         return {
             ...state,
-            data: Object.entries(data)
-                .filter(([_, val]) => filter(val))
-                .map(([key, value]) => value)
+            xScale,
+            yScale,
+            data
         };
     }
 
@@ -36,9 +60,20 @@ class Scatterplot extends React.Component {
                 yLabel,
                 title
             } = this.props,
-            { data } = this.state;
+            { data, xScale, yScale } = this.state;
 
-        return null;
+        return (
+            <g transform={`translate(${x}, ${y})`}>
+                {data.map(d =>
+                    entry({
+                        x: xScale(xData(d)),
+                        y: yScale(yData(d))
+                    })
+                )}
+                <Axis x={0} y={0} scale={yScale} type="Left" />
+                <Axis x={0} y={height} scale={xScale} type="Bottom" />
+            </g>
+        );
     }
 }
 

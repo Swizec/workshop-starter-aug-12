@@ -18,6 +18,24 @@ const Svg = styled.svg`
     top: 250px;
 `;
 
+const Dataviz = ({ data }) => (
+    <Svg>
+        <Scatterplot
+            x={50}
+            y={0}
+            data={data}
+            xData={d => d.weight[0]}
+            yData={d => d.height[0]}
+            entry={({ x, y }) => <Datapoint x={x} y={y} />}
+            width={300}
+            height={300}
+            xLabel="Weight (lbs)"
+            yLabel="Height (in)"
+            title="Breed weight vs. height"
+        />
+    </Svg>
+);
+
 class App extends Component {
     state = {
         data: null,
@@ -63,7 +81,7 @@ class App extends Component {
                     }),
                     {}
                 );
-
+            console.log(data);
             this.setState({ data });
         });
     }
@@ -78,7 +96,11 @@ class App extends Component {
                     <h1 className="App-title">Welcome to React</h1>
                 </header>
                 <p className="App-intro">
-                    {data === null ? "Loading CSV files ..." : null}
+                    {data === null ? (
+                        "Loading CSV files ..."
+                    ) : (
+                        <Dataviz data={data} />
+                    )}
                 </p>
             </div>
         );
