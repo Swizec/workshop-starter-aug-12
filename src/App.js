@@ -21,8 +21,8 @@ const Svg = styled.svg`
 const Dataviz = ({ data }) => (
     <Svg>
         <Scatterplot
-            x={50}
-            y={0}
+            x={80}
+            y={40}
             data={data}
             xData={d => d.weight[0]}
             yData={d => d.height[0]}
@@ -32,6 +32,19 @@ const Dataviz = ({ data }) => (
             xLabel="Weight (lbs)"
             yLabel="Height (in)"
             title="Breed weight vs. height"
+        />
+        <Scatterplot
+            x={80}
+            y={450}
+            data={data}
+            xData={d => d.obey}
+            yData={d => d.sales}
+            entry={({ x, y }) => <Datapoint x={x} y={y} />}
+            width={300}
+            height={300}
+            xLabel="Obey %"
+            yLabel="Sales"
+            title="Sales v Intelligence"
         />
     </Svg>
 );

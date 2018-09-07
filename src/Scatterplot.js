@@ -70,8 +70,17 @@ class Scatterplot extends React.Component {
                         y: yScale(yData(d))
                     })
                 )}
-                <Axis x={0} y={0} scale={yScale} type="Left" />
-                <Axis x={0} y={height} scale={xScale} type="Bottom" />
+                <Heading x={0} y={-10}>
+                    {title}
+                </Heading>
+                <Axis x={0} y={0} scale={yScale} type="Left" label={yLabel} />
+                <Axis
+                    x={0}
+                    y={height}
+                    scale={xScale}
+                    type="Bottom"
+                    label={xLabel}
+                />
             </g>
         );
     }
